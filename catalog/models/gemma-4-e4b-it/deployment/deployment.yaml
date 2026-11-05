@@ -1,0 +1,63 @@
+apiVersion: serving.kserve.io/v1alpha2
+kind: LLMInferenceService
+metadata:
+  annotations:
+    ai-grid/clusters: l4-0,l4-1,rtx-0
+    ai-grid/version: "1"
+    openshift.io/display-name: gemma-4-e4b-it
+  labels:
+    ai-grid/model: gemma-4-e4b-it
+    app.kubernetes.io/managed-by: ai-grid-provider-backend
+  name: gemma-4-e4b-it
+  namespace: ai-grid-internal-models
+spec:
+  model:
+    name: gemma-4-e4b-it
+    uri: oci://quay.io/ravirhsharma/gemma-4-e4b-it@sha256:a25b9962c43a4a50a91c31de5d9c2c3b1dbf587a50d6158ad7a8c6db6b786873
+  replicas: 1
+  router:
+    gateway:
+      refs:
+      - name: openshift-ai-inference
+        namespace: openshift-ingress
+    route: {}
+    scheduler: {}
+  template:
+    containers:
+    - env:
+      - name: VLLM_ADDITIONAL_ARGS
+        value: --enable-auto-tool-choice --tool-call-parser=gemma4 --reasoning-parser=gemma4
+      image: registry.redhat.io/rhaii-preview/vllm-cuda-rhel9:gemma4
+      name: main
+      resources:
+        limits:
+          nvidia.com/gpu: "1"
+        requests:
+          cpu: "12"
+          memory: 20Gi
+          nvidia.com/gpu: "1"
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  labels:
+    ai-grid/model: gemma-4-e4b-it
+    app.kubernetes.io/managed-by: ai-grid-provider-backend
+  name: gemma-4-e4b-it-grid
+  namespace: ai-grid-internal-models
+spec:
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: redhat-ai-grid
+    ports:
+    - port: 8000
+      protocol: TCP
+    - port: 9090
+      protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: gemma-4-e4b-it
+  policyTypes:
+  - Ingress

@@ -1,0 +1,31 @@
+apiVersion: inference.opendatahub.io/v1alpha1
+kind: ExternalModel
+metadata:
+  labels:
+    ai-grid/model: gemma-4-e4b-it
+    app.kubernetes.io/managed-by: ai-grid-provider-backend
+  name: gemma-4-e4b-it
+  namespace: models-as-a-service
+spec:
+  externalProviderRefs:
+  - apiFormat: openai-chat
+    path: /v1/chat/completions
+    ref:
+      name: grid-provider
+    targetModel: gemma-4-e4b-it
+    weight: 1
+---
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSModelRef
+metadata:
+  annotations:
+    openshift.io/display-name: gemma-4-e4b-it
+  labels:
+    ai-grid/model: gemma-4-e4b-it
+    app.kubernetes.io/managed-by: ai-grid-provider-backend
+  name: gemma-4-e4b-it
+  namespace: models-as-a-service
+spec:
+  modelRef:
+    kind: ExternalModel
+    name: gemma-4-e4b-it
