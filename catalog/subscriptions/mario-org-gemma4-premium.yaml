@@ -1,0 +1,41 @@
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSSubscription
+metadata:
+  annotations:
+    ai-grid/version: "1"
+    openshift.io/display-name: Mario Org Gemma4 premium
+  name: mario-org-gemma4-premium
+  namespace: models-as-a-service
+spec:
+  modelRefs:
+  - name: gemma-4-e4b-it
+    namespace: models-as-a-service
+    tokenRateLimits:
+    - limit: 10000
+      window: 1s
+  organization:
+    id: cb6cb27a-0413-4139-82dc-04fa828e5732
+  owner:
+    groups:
+    - name: cb6cb27a-0413-4139-82dc-04fa828e5732/gemma4-premium
+    users: []
+  priority: 1
+---
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSAuthPolicy
+metadata:
+  annotations:
+    openshift.io/display-name: Mario Org Gemma4 premium
+  labels:
+    ai-grid/subscription: mario-org-gemma4-premium
+    app.kubernetes.io/managed-by: ai-grid-provider-backend
+  name: mario-org-gemma4-premium-policy
+  namespace: models-as-a-service
+spec:
+  modelRefs:
+  - name: gemma-4-e4b-it
+    namespace: models-as-a-service
+  subjects:
+    groups:
+    - name: cb6cb27a-0413-4139-82dc-04fa828e5732/gemma4-premium
+    users: []
