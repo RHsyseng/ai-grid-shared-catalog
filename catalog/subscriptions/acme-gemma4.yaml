@@ -1,0 +1,42 @@
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSSubscription
+metadata:
+  annotations:
+    ai-grid/version: "1"
+    maas.opendatahub.io/retain-api-keys-on-delete: "true"
+    openshift.io/display-name: acme-gemma4
+  name: acme-gemma4
+  namespace: models-as-a-service
+spec:
+  modelRefs:
+  - name: gemma-4-e4b-it
+    namespace: models-as-a-service
+    tokenRateLimits:
+    - limit: 10000
+      window: 1m
+  organization:
+    id: c6921987-c2a9-4997-97ed-37a0e052efc4
+  owner:
+    groups:
+    - name: c6921987-c2a9-4997-97ed-37a0e052efc4/ai-grid-users
+    users: []
+  priority: 0
+---
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSAuthPolicy
+metadata:
+  annotations:
+    openshift.io/display-name: acme-gemma4
+  labels:
+    ai-grid/subscription: acme-gemma4
+    app.kubernetes.io/managed-by: ai-grid-provider-backend
+  name: acme-gemma4-policy
+  namespace: models-as-a-service
+spec:
+  modelRefs:
+  - name: gemma-4-e4b-it
+    namespace: models-as-a-service
+  subjects:
+    groups:
+    - name: c6921987-c2a9-4997-97ed-37a0e052efc4/ai-grid-users
+    users: []
