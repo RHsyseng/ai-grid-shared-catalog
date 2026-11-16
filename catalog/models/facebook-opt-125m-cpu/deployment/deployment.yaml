@@ -3,7 +3,7 @@ kind: LLMInferenceService
 metadata:
   annotations:
     ai-grid/clusters: rtx-0
-    ai-grid/version: "1"
+    ai-grid/version: "2"
     openshift.io/display-name: facebook-opt-125m-cpu
   labels:
     ai-grid/model: facebook-opt-125m-cpu
@@ -29,6 +29,8 @@ spec:
         value: "4"
       - name: VLLM_CPU_KVCACHE_SPACE
         value: "4"
+      - name: VLLM_ADDITIONAL_ARGS
+        value: --chat-template=template_chatml.jinja --override-generation-config.max_new_tokens=64
       image: registry.redhat.io/rhaii/vllm-cpu-rhel9@sha256:0ec0f5ff9a5ff263f58db0cfb19e3d7eef24b94c2d8629fe5145f5a8747e28c9
       name: main
       resources:
