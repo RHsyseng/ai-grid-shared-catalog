@@ -1,0 +1,42 @@
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSSubscription
+metadata:
+  annotations:
+    ai-grid/version: "1"
+    maas.opendatahub.io/retain-api-keys-on-delete: "true"
+    openshift.io/display-name: facebook-stark-industries
+  name: facebook-stark-industries-x6gsnz
+  namespace: models-as-a-service
+spec:
+  modelRefs:
+  - name: facebook-opt-125m-cpu
+    namespace: models-as-a-service
+    tokenRateLimits:
+    - limit: 1000
+      window: 1m
+  organization:
+    id: 88592f18-a857-43a5-9c81-020ebcc62a85
+  owner:
+    groups:
+    - name: 88592f18-a857-43a5-9c81-020ebcc62a85/ai-grid-users
+    users: []
+  priority: 0
+---
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSAuthPolicy
+metadata:
+  annotations:
+    openshift.io/display-name: facebook-stark-industries
+  labels:
+    ai-grid/subscription: facebook-stark-industries-x6gsnz
+    app.kubernetes.io/managed-by: ai-grid-provider-backend
+  name: facebook-stark-industries-x6gsnz-policy
+  namespace: models-as-a-service
+spec:
+  modelRefs:
+  - name: facebook-opt-125m-cpu
+    namespace: models-as-a-service
+  subjects:
+    groups:
+    - name: 88592f18-a857-43a5-9c81-020ebcc62a85/ai-grid-users
+    users: []
