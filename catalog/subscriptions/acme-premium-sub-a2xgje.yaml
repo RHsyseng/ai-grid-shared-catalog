@@ -1,0 +1,51 @@
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSSubscription
+metadata:
+  annotations:
+    ai-grid/create-request-fingerprint-sha256: 51254016ffbf5c8de4d5dc8eb5d925718f0202b27f4feb70829861987daca4d7
+    ai-grid/create-request-token-sha256: 7aa9a5daa8bf6f18a8a26f598f087b351fde3eb2366ddaf18a0fd9bf975b3964
+    ai-grid/version: "1"
+    maas.opendatahub.io/retain-api-keys-on-delete: "true"
+    openshift.io/display-name: acme-premium-sub
+  name: acme-premium-sub-a2xgje
+  namespace: models-as-a-service
+spec:
+  modelRefs:
+  - name: facebook-opt-125m-cpu
+    namespace: models-as-a-service
+    tokenRateLimits:
+    - limit: 10000
+      window: 1m
+  - name: gemma-4-e4b-it
+    namespace: models-as-a-service
+    tokenRateLimits:
+    - limit: 10000
+      window: 1m
+  organization:
+    id: 9620bca5-16a2-4bc5-960f-2df372c86713
+  owner:
+    groups:
+    - name: 9620bca5-16a2-4bc5-960f-2df372c86713/ai-grid-admins
+    users: []
+  priority: 0
+---
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSAuthPolicy
+metadata:
+  annotations:
+    openshift.io/display-name: acme-premium-sub
+  labels:
+    ai-grid/subscription: acme-premium-sub-a2xgje
+    app.kubernetes.io/managed-by: ai-grid-provider-backend
+  name: acme-premium-sub-a2xgje-policy
+  namespace: models-as-a-service
+spec:
+  modelRefs:
+  - name: facebook-opt-125m-cpu
+    namespace: models-as-a-service
+  - name: gemma-4-e4b-it
+    namespace: models-as-a-service
+  subjects:
+    groups:
+    - name: 9620bca5-16a2-4bc5-960f-2df372c86713/ai-grid-admins
+    users: []
